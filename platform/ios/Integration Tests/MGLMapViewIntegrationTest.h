@@ -1,5 +1,6 @@
 #import <XCTest/XCTest.h>
 #import <Mapbox/Mapbox.h>
+#import "MGLTestUtility.h"
 
 #define TestFailWithSelf(myself, ...) \
     _XCTPrimitiveFail(myself, __VA_ARGS__)
