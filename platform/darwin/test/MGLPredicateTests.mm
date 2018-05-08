@@ -430,16 +430,16 @@ namespace mbgl {
                           mustRoundTrip:NO];
     }
     {
-        NSArray *expected = @[@"match", @[@"id"], @6, @YES, @5, @YES, @4, @YES, @3, @YES, @NO];
+        NSArray *expected = @[@"match", @[@"id"], @[@"literal", @[@6, @5, @4, @3]], @YES, @NO];
         NSPredicate *predicate = [NSPredicate predicateWithFormat:@"$featureIdentifier IN { 6, 5, 4, 3}"];
         XCTAssertEqualObjects(predicate.mgl_jsonExpressionObject, expected);
-        NSPredicate *predicateAfter = [NSPredicate predicateWithFormat:@"MGL_MATCH(CAST($featureIdentifier, 'NSNumber'), 3, YES, 4, YES, 5, YES, 6, YES, NO) == YES"];
+        NSPredicate *predicateAfter = [NSPredicate predicateWithFormat:@"MGL_MATCH(CAST($featureIdentifier, 'NSNumber'), { 6, 5, 4, 3}, YES, NO) == YES"];
         auto forwardFilter = [NSPredicate mgl_predicateWithJSONObject:expected].mgl_filter;
         NSPredicate *forwardPredicateAfter = [NSPredicate mgl_predicateWithFilter:forwardFilter];
         XCTAssertEqualObjects(predicateAfter, forwardPredicateAfter);
     }
     {
-        NSArray *expected = @[@"!", @[@"match", @[@"get", @"x"], @6, @YES, @5, @YES, @4, @YES, @3, @YES, @NO]];
+        NSArray *expected = @[@"!", @[@"match", @[@"get", @"x"], @[@"literal", @[@6, @5, @4, @3]], @YES, @NO]];
         NSPredicate *predicate = [NSPredicate predicateWithFormat:@"NOT x IN { 6, 5, 4, 3}"];
         XCTAssertEqualObjects(predicate.mgl_jsonExpressionObject, expected);
         NSPredicate *predicateAfter = [NSPredicate predicateWithFormat:@"NOT MGL_MATCH(CAST(x, 'NSNumber'), 3, YES, 4, YES, 5, YES, 6, YES, NO) == YES"];
